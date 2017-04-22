@@ -1,134 +1,176 @@
--- ---
--- Globals
--- ---
+-- phpMyAdmin SQL Dump
+-- version 4.5.1
+-- http://www.phpmyadmin.net
+--
+-- Host: 127.0.0.1
+-- Generation Time: 22-Abr-2017 às 16:36
+-- Versão do servidor: 10.1.13-MariaDB
+-- PHP Version: 5.6.21
 
--- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
--- SET FOREIGN_KEY_CHECKS=0;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
--- ---
--- Table 'tbl_user_client'
--- 
--- ---
 
-DROP TABLE IF EXISTS `tbl_user_client`;
-		
-CREATE TABLE `tbl_user_client` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `login` VARCHAR(20) NOT NULL DEFAULT 'NULL',
-  `senha` VARCHAR(10) NOT NULL,
-  PRIMARY KEY (`id`)
-);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
--- ---
--- Table 'tbl_produtos'
--- 
--- ---
+--
+-- Database: `dkbase`
+--
 
-DROP TABLE IF EXISTS `tbl_produtos`;
-		
-CREATE TABLE `tbl_produtos` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `nome` VARCHAR(40) NOT NULL,
-  PRIMARY KEY (`id`)
-);
+-- --------------------------------------------------------
 
--- ---
--- Table 'tbl_valor_produto'
--- 
--- ---
+--
+-- Estrutura da tabela `tbl_comprador`
+--
 
-DROP TABLE IF EXISTS `tbl_valor_produto`;
-		
-CREATE TABLE `tbl_valor_produto` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `id_produto` INTEGER NOT NULL,
-  `valor_unit` DOUBLE NOT NULL,
-  `valor_qntd` DOUBLE NOT NULL,
-  PRIMARY KEY (`id`, `id_produto`)
-);
-
--- ---
--- Table 'tbl_movimento_caixa'
--- 
--- ---
-
-DROP TABLE IF EXISTS `tbl_movimento_caixa`;
-		
-CREATE TABLE `tbl_movimento_caixa` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `data_mov` DATETIME NOT NULL,
-  `valor` DOUBLE NOT NULL,
-  `descricao` VARCHAR(255) NOT NULL,
-  `tipo_mov` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
-);
-
--- ---
--- Table 'tbl_venda'
--- 
--- ---
-
-DROP TABLE IF EXISTS `tbl_venda`;
-		
-CREATE TABLE `tbl_venda` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `dataHora` DATETIME NOT NULL,
-  `id_valor_produto` INTEGER NOT NULL,
-  `id_comprador` INTEGER NOT NULL,
-  `id_produto_tbl_valor_negociado` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`, `id_valor_produto`, `id_produto_tbl_valor_negociado`)
-);
-
--- ---
--- Table 'tbl_comprador'
--- 
--- ---
-
-DROP TABLE IF EXISTS `tbl_comprador`;
-		
 CREATE TABLE `tbl_comprador` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `nome` VARCHAR NOT NULL,
-  `localizacao` VARCHAR(500) NULL DEFAULT NULL,
-  `telefone` VARCHAR(20) NOT NULL,
-  PRIMARY KEY (`id`)
-);
+  `id` int(11) NOT NULL,
+  `nome` varchar(200) NOT NULL,
+  `localizacao` varchar(300) DEFAULT NULL,
+  `telefone` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- ---
--- Table 'tbl_valor_negociado'
--- 
--- ---
+-- --------------------------------------------------------
 
-DROP TABLE IF EXISTS `tbl_valor_negociado`;
-		
-CREATE TABLE `tbl_valor_negociado` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `id_comprador` INTEGER NOT NULL,
-  `id_produto` INTEGER NULL DEFAULT NULL,
-  `valor_negociado` DOUBLE NOT NULL,
-  PRIMARY KEY (`id`, `id_comprador`, `id_produto`)
-);
+--
+-- Estrutura da tabela `tbl_movimento_caixa`
+--
 
--- ---
--- Foreign Keys 
--- ---
+CREATE TABLE `tbl_movimento_caixa` (
+  `id` int(11) NOT NULL,
+  `data_mov` datetime NOT NULL,
+  `valor` double NOT NULL,
+  `descricao` varchar(255) NOT NULL,
+  `tipo_mov` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-ALTER TABLE `tbl_produtos` ADD FOREIGN KEY (id) REFERENCES `tbl_valor_produto` (`id_produto`);
-ALTER TABLE `tbl_valor_produto` ADD FOREIGN KEY (id) REFERENCES `tbl_venda` (`id_valor_produto`);
-ALTER TABLE `tbl_valor_produto` ADD FOREIGN KEY (id_produto) REFERENCES `tbl_valor_negociado` (`id_produto`);
-ALTER TABLE `tbl_venda` ADD FOREIGN KEY (id_produto_tbl_valor_negociado) REFERENCES `tbl_valor_negociado` (`id`);
-ALTER TABLE `tbl_comprador` ADD FOREIGN KEY (id) REFERENCES `tbl_valor_negociado` (`id_comprador`);
+-- --------------------------------------------------------
 
--- ---
--- Table Properties
--- ---
+--
+-- Estrutura da tabela `tbl_produtos`
+--
 
--- ALTER TABLE `tbl_user_client` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_produtos` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_valor_produto` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_movimento_caixa` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_venda` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_comprador` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_valor_negociado` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+CREATE TABLE `tbl_produtos` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(40) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
 
+--
+-- Estrutura da tabela `tbl_user_client`
+--
+
+CREATE TABLE `tbl_user_client` (
+  `id` int(11) NOT NULL,
+  `login` varchar(20) NOT NULL DEFAULT 'NULL',
+  `senha` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tbl_valor_produto`
+--
+
+CREATE TABLE `tbl_valor_produto` (
+  `id` int(11) NOT NULL,
+  `id_produto` int(11) NOT NULL,
+  `valor_unit` double NOT NULL,
+  `valor_qntd` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tbl_venda`
+--
+
+CREATE TABLE `tbl_venda` (
+  `id` int(11) NOT NULL,
+  `dataHora` datetime NOT NULL,
+  `id_valor_produto` int(11) NOT NULL,
+  `id_comprador` int(11) NOT NULL,
+  `id_produto_tbl_valor_negociado` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_comprador`
+--
+ALTER TABLE `tbl_comprador`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_movimento_caixa`
+--
+ALTER TABLE `tbl_movimento_caixa`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_produtos`
+--
+ALTER TABLE `tbl_produtos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_user_client`
+--
+ALTER TABLE `tbl_user_client`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_valor_produto`
+--
+ALTER TABLE `tbl_valor_produto`
+  ADD PRIMARY KEY (`id`,`id_produto`);
+
+--
+-- Indexes for table `tbl_venda`
+--
+ALTER TABLE `tbl_venda`
+  ADD PRIMARY KEY (`id`,`id_valor_produto`,`id_produto_tbl_valor_negociado`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_comprador`
+--
+ALTER TABLE `tbl_comprador`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tbl_movimento_caixa`
+--
+ALTER TABLE `tbl_movimento_caixa`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tbl_produtos`
+--
+ALTER TABLE `tbl_produtos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tbl_user_client`
+--
+ALTER TABLE `tbl_user_client`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tbl_valor_produto`
+--
+ALTER TABLE `tbl_valor_produto`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tbl_venda`
+--
+ALTER TABLE `tbl_venda`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
